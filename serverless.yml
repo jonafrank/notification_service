@@ -1,0 +1,22 @@
+service: notification-service
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  environment:
+    REDIS_HOST: ${env:REDIS_HOST}
+    REDIS_PORT: ${env:REDIS_PORT}
+    MAILGUN_API_KEY: ${env:MAILGUN_API_KEY}
+    MAILGUN_DOMAIN: ${env:MAILGUN_DOMAIN}
+
+functions:
+  sendNotification:
+    handler: src/handler.sendNotification
+    events:
+      - http:
+          path: notifications/send
+          method: post
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
